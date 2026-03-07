@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-
+import { useEffect, useRef } from 'react';
 export const HangingSpiderman = () => {
   const spidermanRef = useRef<HTMLDivElement>(null);
   const webRef = useRef<HTMLDivElement>(null);
