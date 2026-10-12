@@ -1,291 +1,109 @@
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React from 'react';
 
-gsap.registerPlugin(ScrollTrigger);
-
-interface TerminalLine {
-  command: string;
-  output: string[];
-  delay: number;
-}
-
-const terminalLines: TerminalLine[] = [
-  {
-    command: 'whoaaammiiii',
-    output: ['Fayez — CS Student, AI/ML Specialization', 'KIIT University · 24155102@kiit.ac.in'],
-    delay: 400,
-  },
-  {
-    command: 'sskiiiiill --llliiistttt',
-    output: [
-      'Loading modules...',
-      '[OK] Python · C · HTML/CSS · JavaScript',
-      '[OK] Machine Learning · Deep Learning · NLP',
-      '[OK] Streamlit · Git · VS Code · Premiere Pro',
-    ],
-    delay: 600,
-  },
-  {
-    command: 'eeedddduuuucationnn',
-    output: [
-      'B.Tech Computer Science @ KIIT University',
-      'Specialization: Artificial Intelligence & ML',
-    ],
-    delay: 500,
-  },
-  {
-    command: 'ccurrentttlyyy --bbuiiildinggg',
-    output: ['Hallway Chat  [Real-time · WebSockets · Node.js]'],
-    delay: 500,
-  },
-];
-
-// Clean character-by-character typing hook
-const useTypingEffect = (text: string, isActive: boolean, speed = 38) => {
-  const [displayed, setDisplayed] = useState('');
-  const [done, setDone] = useState(false);
-
-  useEffect(() => {
-    if (!isActive) return;
-    setDisplayed('');
-    setDone(false);
-    let i = 0;
-    const interval = setInterval(() => {
-      i++;
-      setDisplayed(text.slice(0, i));
-      if (i >= text.length) {
-        clearInterval(interval);
-        setDone(true);
-      }
-    }, speed);
-    return () => clearInterval(interval);
-  }, [text, isActive, speed]);
-
-  return { displayed, done };
-};
-
-// Single command block — types the command then shows output
-const CommandBlock = ({
-  line,
-  isActive,
-  onComplete,
-}: {
-  line: TerminalLine;
-  isActive: boolean;
-  onComplete: () => void;
-}) => {
-  const { displayed, done } = useTypingEffect(line.command, isActive);
-  const [showOutput, setShowOutput] = useState(false);
-  const calledComplete = useRef(false);
-
-  useEffect(() => {
-    if (done && !showOutput) {
-      const t = setTimeout(() => setShowOutput(true), 180);
-      return () => clearTimeout(t);
-    }
-  }, [done]);
-
-  useEffect(() => {
-    if (showOutput && !calledComplete.current) {
-      calledComplete.current = true;
-      const t = setTimeout(onComplete, line.output.length * 90 + 300);
-      return () => clearTimeout(t);
-    }
-  }, [showOutput]);
-
+const About: React.FC = () => {
   return (
-    <div className="mb-5">
-      {/* Command row */}
-      <div className="flex items-center gap-2 mb-2">
-        <span style={{ color: '#00F5FF' }}>{'>'}</span>
-        <span style={{ color: '#00F5FF' }}>{displayed}</span>
-        {/* Cursor while still typing */}
-        {isActive && !done && (
+    <section id="about" className="py-24 border-t border-white/5 bg-[#0a0b0d]">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8">
+        
+        {/* Section Pill Badge */}
+        <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.04] border border-white/10 px-3.5 py-1 text-xs font-mono uppercase tracking-wider text-[#a3e635] mb-6">
+          <span>// ABOUT ME</span>
+        </div>
+
+        {/* Headline with Inverted Pills */}
+        <h2 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-[1.2] mb-12 max-w-4xl">
+          I've been{' '}
           <span
-            style={{
-              display: 'inline-block',
-              width: '8px',
-              height: '16px',
-              background: '#00F5FF',
-              borderRadius: '1px',
-              animation: 'blink 1s step-end infinite',
-              verticalAlign: 'middle',
-            }}
-          />
-        )}
-      </div>
-
-      {/* Output rows */}
-      {showOutput &&
-        line.output.map((outputLine, i) => (
-          <div
-            key={i}
-            className="ml-4"
-            style={{
-              color: outputLine.startsWith('[OK]')
-                ? '#28c840'
-                : outputLine.includes('Artificial Intelligence') ||
-                  outputLine.includes('Streamlit · ML')
-                ? '#f0c060'
-                : 'rgba(201, 209, 217, 0.75)',
-              animation: `fadeIn 0.2s ease ${i * 90}ms both`,
-            }}
+            className="inline-block px-4 sm:px-5 py-0.5 sm:py-1 rounded-full font-black mx-1 align-baseline shadow-md"
+            style={{ backgroundColor: '#ffffff', color: '#000000' }}
           >
-            {outputLine}
-          </div>
-        ))}
-    </div>
-  );
-};
-
-const About = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const terminalRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const [showCursor, setShowCursor] = useState(true);
-
-  // Blinking cursor
-  useEffect(() => {
-    const interval = setInterval(() => setShowCursor((p) => !p), 530);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Scroll trigger — starts the sequence
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top 80%',
-        once: true,
-        onEnter: () => {
-          setTimeout(() => setActiveIndex(0), 200);
-        },
-      });
-
-      gsap.fromTo(
-        terminalRef.current,
-        { y: 80, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 80%',
-          },
-        }
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const handleLineComplete = (index: number) => {
-    if (index + 1 < terminalLines.length) {
-      setTimeout(() => setActiveIndex(index + 1), terminalLines[index + 1].delay);
-    } else {
-      setActiveIndex(terminalLines.length); // all done
-    }
-  };
-
-  const allDone = activeIndex >= terminalLines.length;
-
-  return (
-    <section
-      ref={sectionRef}
-      id="about"
-      className="relative min-h-screen flex items-center justify-center py-20 px-6"
-    >
-      {/* Keyframes injected once */}
-      <style>{`
-        @keyframes blink   { 0%,100% { opacity:1 } 50% { opacity:0 } }
-        @keyframes fadeIn  { from { opacity:0; transform:translateY(4px) } to { opacity:1; transform:none } }
-      `}</style>
-
-      {/* Background gradient */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-30"
-        style={{
-          background:
-            'radial-gradient(ellipse at 30% 50%, rgba(124, 58, 237, 0.1) 0%, transparent 50%)',
-        }}
-      />
-
-      <div className="relative z-10 w-full max-w-3xl mx-auto">
-        {/* Section title */}
-        <div className="mb-12 text-center">
-          <span className="font-mono text-sm tracking-wider" style={{ color: '#00F5FF' }}>
-            &gt; ABOUT_ME
+            Engineering
+          </span>{' '}
+          Intelligent Systems since{' '}
+          <span
+            className="inline-block px-4 sm:px-5 py-0.5 sm:py-1 rounded-full font-black mx-1 align-baseline shadow-[0_0_20px_rgba(163,230,53,0.2)]"
+            style={{ backgroundColor: '#a3e635', color: '#0a0b0d' }}
+          >
+            2023
           </span>
-          <h2 className="font-bold text-4xl md:text-5xl text-white mt-2">Who Am I?</h2>
-        </div>
+        </h2>
 
-        {/* Terminal window */}
-        <div
-          ref={terminalRef}
-          className="rounded-xl overflow-hidden"
-          style={{
-            background: '#0d0d0f',
-            border: '1px solid rgba(255,255,255,0.08)',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0,245,255,0.04)',
-          }}
-        >
-          {/* Title bar */}
-          <div
-            className="flex items-center gap-2 px-4 py-3"
-            style={{
-              background: 'rgba(255,255,255,0.02)',
-              borderBottom: '1px solid rgba(255,255,255,0.05)',
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full" style={{ background: '#ff5f56' }} />
-              <div className="w-3 h-3 rounded-full" style={{ background: '#ffbd2e' }} />
-              <div className="w-3 h-3 rounded-full" style={{ background: '#27c93f' }} />
+        {/* Editorial Story Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          {/* Main Story Narrative (7 cols) */}
+          <div className="lg:col-span-7 space-y-6 text-slate-300 text-base sm:text-lg leading-relaxed font-normal">
+            <p>
+              I am an undergraduate Computer Science engineer specializing in{' '}
+              <span className="text-[#a3e635] font-medium">Artificial Intelligence and Machine Learning</span>. My engineering passion lives at the intersection of rigorous mathematical data science and resilient, high-concurrency web architecture.
+            </p>
+
+            <p>
+              Whether it’s training supervised regression models in Scikit-Learn or designing sub-50ms duplex WebSockets in{' '}
+              <strong className="text-white font-semibold">Hallway Chat</strong> and high-precision calculation tools in{' '}
+              <strong className="text-white font-semibold">Flunked</strong>, I focus on turning complex algorithms into production-grade systems that perform reliably under real-world load.
+            </p>
+
+            <p>
+              Beyond the terminal, I channel storytelling through Adobe Premiere Pro video editing, dissecting audio-visual pacing and framing, and exploring creative visual aesthetics.
+            </p>
+          </div>
+
+          {/* Quick Metrics & Highlights Bento (5 cols) */}
+          <div className="lg:col-span-5 grid grid-cols-2 gap-4">
+            
+            <div className="bg-[#141518] border border-white/5 p-6 rounded-2xl hover:border-[#a3e635]/30 transition-colors">
+              <span className="text-3xl sm:text-4xl font-black font-mono text-[#a3e635] block mb-2">
+                4+
+              </span>
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-400 block mb-1">
+                Featured Systems
+              </span>
+              <p className="text-xs text-slate-500 leading-normal">
+                Flunked, Hallway Chat, BunkCalc, and LeenOut.
+              </p>
             </div>
-            <span className="ml-4 text-xs font-mono" style={{ color: 'rgba(255,255,255,0.35)' }}>
-              fayez@portfolio:~
-            </span>
+
+            <div className="bg-[#141518] border border-white/5 p-6 rounded-2xl hover:border-[#a3e635]/30 transition-colors">
+              <span className="text-3xl sm:text-4xl font-black font-mono text-white block mb-2">
+                AI / ML
+              </span>
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-400 block mb-1">
+                Specialization
+              </span>
+              <p className="text-xs text-slate-500 leading-normal">
+                B.Tech Computer Science AI &amp; ML engineering track.
+              </p>
+            </div>
+
+            <div className="bg-[#141518] border border-white/5 p-6 rounded-2xl hover:border-[#a3e635]/30 transition-colors">
+              <span className="text-3xl sm:text-4xl font-black font-mono text-white block mb-2">
+                &lt;50ms
+              </span>
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-400 block mb-1">
+                Real-Time Latency
+              </span>
+              <p className="text-xs text-slate-500 leading-normal">
+                Duplex WebSockets &amp; peer-synchronized room events.
+              </p>
+            </div>
+
+            <div className="bg-[#141518] border border-white/5 p-6 rounded-2xl hover:border-[#a3e635]/30 transition-colors">
+              <span className="text-3xl sm:text-4xl font-black font-mono text-[#a3e635] block mb-2">
+                100%
+              </span>
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-400 block mb-1">
+                Type Safety &amp; Docs
+              </span>
+              <p className="text-xs text-slate-500 leading-normal">
+                Strict TypeScript, automated schemas &amp; clean code.
+              </p>
+            </div>
+
           </div>
 
-          {/* Terminal body */}
-          <div
-            className="p-6 font-mono text-sm md:text-base"
-            style={{ background: '#0d0d0f', minHeight: '320px' }}
-          >
-            {terminalLines.map((line, i) => {
-              if (i > activeIndex) return null; // not reached yet
-              return (
-                <CommandBlock
-                  key={i}
-                  line={line}
-                  isActive={i === activeIndex}
-                  onComplete={() => handleLineComplete(i)}
-                />
-              );
-            })}
-
-            {/* Final idle cursor */}
-            {allDone && (
-              <div className="flex items-center gap-2 mt-1">
-                <span style={{ color: '#00F5FF' }}>{'>'}</span>
-                <span
-                  style={{
-                    display: 'inline-block',
-                    width: '8px',
-                    height: '16px',
-                    background: '#00F5FF',
-                    borderRadius: '1px',
-                    opacity: showCursor ? 1 : 0,
-                    transition: 'opacity 0.1s',
-                  }}
-                />
-              </div>
-            )}
-          </div>
         </div>
+
       </div>
     </section>
   );

@@ -1,477 +1,222 @@
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { X, ExternalLink, Github } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
+import React from 'react';
+import { ArrowUpRight, Folder, Check } from 'reicon-react';
 
 interface Project {
-  id: number;
+  id: string;
+  tag: string;
   title: string;
+  timeline: string;
   description: string;
-  longDescription: string;
-  tags: string[];
-  image: string;
-  video?: string;
-  github?: string;
-  demo?: string;
+  highlights: string[];
+  tech: string[];
+  liveUrl?: string;
+  githubUrl: string;
 }
 
 const projects: Project[] = [
   {
-    id: 1,
-    title: 'CampusLink',
-    description: 'Full-stack campus social platform connecting university students',
-    longDescription:
-      'CampusLink is a full-stack social platform designed for university students to connect, collaborate, and share resources. Built with JavaScript, TypeScript, and CSS, it features real-time interactions, a modern responsive UI, and is deployed on Vercel for seamless access. The platform helps bridge the gap between students across departments and campuses.',
-    tags: ['JavaScript', 'TypeScript', 'CSS', 'Node.js', 'Vercel'],
-    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80',
-    github: 'https://github.com/FAYEZ087/campuslink',
-    demo: 'https://campuslink-eta.vercel.app',
+    id: 'flunked',
+    tag: 'Academic Tools · 19+ Calculators',
+    title: 'Flunked — Academic Survival & Campus Tools',
+    timeline: '2024 - Present',
+    description:
+      'Independent academic survival platform built for Indian college students. Features high-precision client-side calculators including the UGC/AICTE 75% bunk limit algorithm, CTC to in-hand take-home salary breakdowns, and official university CGPA conversion formulas.',
+    highlights: [
+      '19+ client-side tools running in-browser with zero tracking cookies and zero ads',
+      'Custom algorithms for 75% bunk thresholds, medical attendance bands, and recovery streaks',
+      'Realistic CTC breakdown modeling EPF (12%), Gratuity, Professional Tax, and New Tax Regime slabs',
+    ],
+    tech: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Vercel'],
+    liveUrl: 'https://flunked.online',
+    githubUrl: 'https://github.com/PinecoXZ',
   },
   {
-    id: 2,
-    title: 'MidnightCampus',
-    description: 'Anonymous campus chat app with real-time video calling',
-    longDescription:
-      'MidnightCampus is an anonymous campus communication platform built with TypeScript and JavaScript. It enables students to connect through real-time chat and video calling features, fostering late-night study sessions and spontaneous conversations. The app features WebSocket-based real-time messaging, WebRTC video calls, and a sleek dark-themed UI.',
-    tags: ['TypeScript', 'JavaScript', 'CSS', 'WebSocket', 'WebRTC'],
-    image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80',
-    github: 'https://github.com/FAYEZ087/MidnightCampus',
+    id: 'hallway-chat',
+    tag: 'Real-Time WebSockets',
+    title: 'Hallway Chat — Live Duplex Conversational Platform',
+    timeline: '2024 - Present',
+    description:
+      'Production real-time messaging platform architected for instant community conversations. Features low-latency duplex WebSocket synchronization, live participant status tracking, and responsive message threading.',
+    highlights: [
+      'Sub-50ms message delivery via optimized Node.js & WebSocket gateway',
+      'Modular client architecture built with TypeScript, React, and Tailwind CSS',
+      'Deployed on custom production domain with SSL and active uptime health checks',
+    ],
+    tech: ['TypeScript', 'React', 'Node.js', 'WebSockets', 'Express', 'Tailwind CSS'],
+    liveUrl: 'https://hallwaychat.online',
+    githubUrl: 'https://github.com/PinecoXZ/Hallway-Chat',
   },
   {
-    id: 3,
-    title: 'Salary Prediction',
-    description: 'ML-powered salary prediction using Python and data science',
-    longDescription:
-      'A machine learning project that predicts salaries based on various features like experience, education, and job role. Built with Python, it uses data preprocessing, feature engineering, and regression models to provide accurate salary estimates. The project includes data visualization, model training, and evaluation pipelines using libraries like scikit-learn, pandas, and matplotlib.',
-    tags: ['Python', 'Machine Learning', 'Pandas', 'Scikit-learn', 'Streamlit'],
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
-    github: 'https://github.com/FAYEZ087/salary_prediction_project',
+    id: 'bunkcalc',
+    tag: 'Attendance Analytics',
+    title: 'BunkCalc — Smart Attendance Tracker & Planner',
+    timeline: '2024',
+    description:
+      'Smart attendance tracking and prediction engine engineered for university students to mathematically evaluate required attendance thresholds (75%+ academic criteria) and strategically plan leaves.',
+    highlights: [
+      'Interactive attendance calculation simulator with instant threshold updates',
+      'Clean mobile-first user experience designed with TypeScript, React, and Vite',
+      'Client-side persistent caching enabling offline-ready attendance audits',
+    ],
+    tech: ['TypeScript', 'React', 'Vite', 'Tailwind CSS', 'Vercel'],
+    liveUrl: 'https://bunk-calc-web.vercel.app',
+    githubUrl: 'https://github.com/PinecoXZ/BunkCalc_Web',
   },
   {
-    id: 4,
-    title: 'CampusLink Server',
-    description: 'Backend API server powering the CampusLink platform',
-    longDescription:
-      'The backend server for CampusLink, handling API endpoints, authentication, database operations, and real-time communication. Built with JavaScript and Node.js, it provides a robust REST API for the frontend client, manages user sessions, and handles data persistence. The server architecture follows best practices for scalability and security.',
-    tags: ['JavaScript', 'Node.js', 'Express', 'REST API', 'MongoDB'],
-    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80',
-    github: 'https://github.com/FAYEZ087/campuslink-server',
+    id: 'leenout',
+    tag: 'Frontend Utility',
+    title: 'LeenOut — Focused Digital Workflow App',
+    timeline: '2024',
+    description:
+      'Minimalist, distraction-free productivity utility designed for streamlined web sessions and fast daily task organization.',
+    highlights: [
+      'Fast client-side hydration with sub-second initial interactive render',
+      'Keyboard-first UX and sleek responsive interface',
+      'Deployed live on Vercel with automated continuous deployment pipelines',
+    ],
+    tech: ['TypeScript', 'React', 'Vite', 'Tailwind CSS', 'Vercel'],
+    liveUrl: 'https://leen-out.vercel.app',
+    githubUrl: 'https://github.com/PinecoXZ/LeenOut',
   },
 ];
 
-// 3D Tilt Card Component with enhanced effects
-const TiltCard = ({
-  project,
-  onClick,
-}: {
-  project: Project;
-  onClick: (project: Project) => void;
-}) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const glareRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current || !glareRef.current) return;
-
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    // Calculate rotation (more pronounced - up to 15 degrees)
-    const rotateX = ((y - centerY) / centerY) * -15;
-    const rotateY = ((x - centerX) / centerX) * 15;
-
-    // Calculate glare position
-    const glareX = (x / rect.width) * 100;
-    const glareY = (y / rect.height) * 100;
-
-    // Apply 3D transform with scale
-    gsap.to(cardRef.current, {
-      rotateX: rotateX,
-      rotateY: rotateY,
-      scale: 1.05,
-      duration: 0.4,
-      ease: 'power2.out',
-    });
-
-    // Move glare effect
-    gsap.to(glareRef.current, {
-      background: `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.15) 0%, transparent 50%)`,
-      duration: 0.3,
-      ease: 'power2.out',
-    });
-  };
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-    if (!cardRef.current) return;
-
-    // Add shadow depth on hover
-    gsap.to(cardRef.current, {
-      boxShadow: '0 25px 50px -12px rgba(0, 245, 255, 0.25), 0 0 30px rgba(0, 245, 255, 0.1)',
-      duration: 0.4,
-      ease: 'power2.out',
-    });
-  };
-
-  const handleMouseLeave = () => {
-    if (!cardRef.current || !glareRef.current) return;
-    setIsHovered(false);
-
-    // Reset all transforms
-    gsap.to(cardRef.current, {
-      rotateX: 0,
-      rotateY: 0,
-      scale: 1,
-      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-      duration: 0.6,
-      ease: 'power2.out',
-    });
-
-    // Hide glare
-    gsap.to(glareRef.current, {
-      background: 'transparent',
-      duration: 0.3,
-      ease: 'power2.out',
-    });
-  };
-
+const Projects: React.FC = () => {
   return (
-    <div
-      className="perspective-1000"
-      style={{ perspective: '1000px' }}
-    >
-      <div
-        ref={cardRef}
-        className="relative cursor-pointer preserve-3d"
-        style={{
-          transformStyle: 'preserve-3d',
-          transition: 'box-shadow 0.4s ease',
-        }}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onClick={() => onClick(project)}
-        data-cursor="project"
-      >
-        <div className="glass-card rounded-2xl overflow-hidden group">
-          {/* Image Container */}
-          <div className="relative aspect-video overflow-hidden">
-            <img
-              src={project.image}
-              alt={project.title}
-              className={`w-full h-full object-cover transition-transform duration-500 ${
-                isHovered ? 'scale-110' : 'scale-100'
-              }`}
-            />
-            {/* Overlay on hover */}
-            <div
-              className={`absolute inset-0 bg-gradient-to-t from-void via-void/50 to-transparent transition-opacity duration-300 ${
-                isHovered ? 'opacity-80' : 'opacity-40'
-              }`}
-            />
-            {/* Tags */}
-            <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-2">
-              {project.tags.slice(0, 3).map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2 py-1 text-xs font-mono bg-cyan/20 text-cyan rounded backdrop-blur-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="p-6 relative z-10">
-            <h3 className="font-display font-bold text-xl text-white mb-2 group-hover:text-cyan transition-colors duration-300">
-              {project.title}
-            </h3>
-            <p className="text-white/60 text-sm font-body line-clamp-2">
-              {project.description}
-            </p>
-          </div>
-
-          {/* Glare overlay */}
-          <div
-            ref={glareRef}
-            className="absolute inset-0 rounded-2xl pointer-events-none z-20"
-            style={{ background: 'transparent' }}
-          />
-
-          {/* Border glow effect */}
-          <div
-            className={`absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-300 ${
-              isHovered ? 'opacity-100' : 'opacity-0'
-            }`}
-            style={{
-              boxShadow: 'inset 0 0 20px rgba(0, 245, 255, 0.15), 0 0 20px rgba(0, 245, 255, 0.1)',
-            }}
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Expanded Project Modal
-const ProjectModal = ({
-  project,
-  onClose,
-}: {
-  project: Project;
-  onClose: () => void;
-}) => {
-  const modalRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Animate in
-    gsap.fromTo(
-      modalRef.current,
-      { opacity: 0 },
-      { opacity: 1, duration: 0.3, ease: 'power2.out' }
-    );
-    gsap.fromTo(
-      contentRef.current,
-      { scale: 0.9, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.4, ease: 'power3.out', delay: 0.1 }
-    );
-
-    // Lock body scroll
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, []);
-
-  const handleClose = () => {
-    gsap.to(contentRef.current, {
-      scale: 0.9,
-      opacity: 0,
-      duration: 0.3,
-      ease: 'power2.in',
-    });
-    gsap.to(modalRef.current, {
-      opacity: 0,
-      duration: 0.3,
-      delay: 0.1,
-      ease: 'power2.in',
-      onComplete: onClose,
-    });
-  };
-
-  return (
-    <div
-      ref={modalRef}
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-8"
-      onClick={handleClose}
-    >
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-void/95 backdrop-blur-xl" />
-
-      {/* Content */}
-      <div
-        ref={contentRef}
-        className="relative w-full max-w-4xl max-h-[90vh] overflow-auto glass-card rounded-3xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Close button */}
-        <button
-          onClick={handleClose}
-          className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
-          data-cursor="link"
-        >
-          <X className="w-5 h-5 text-white" />
-        </button>
-
-        {/* Hero Image */}
-        <div className="relative aspect-video">
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-void via-transparent to-transparent" />
+    <section id="projects" className="py-24 border-t border-white/5 bg-[#0a0b0d]">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8">
+        
+        {/* Section Pill Badge without emoji */}
+        <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.04] border border-white/10 px-3.5 py-1 text-xs font-mono uppercase tracking-wider text-[#a3e635] mb-6">
+          <Folder size={14} weight="Filled" />
+          <span>Selected Works</span>
         </div>
 
-        {/* Content */}
-        <div className="p-8">
-          <h2 className="font-display font-bold text-3xl md:text-4xl text-white mb-4">
-            {project.title}
-          </h2>
-
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            {project.tags.map((tag) => (
+        {/* Section Heading matching Dribbble style */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+          <div>
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+              Take a look at the latest{' '}
               <span
-                key={tag}
-                className="px-3 py-1 text-sm font-mono bg-cyan/10 text-cyan rounded-full border border-cyan/30"
+                className="inline-block px-4 py-0.5 rounded-full font-black mx-1 align-baseline shadow-[0_0_20px_rgba(163,230,53,0.2)]"
+                style={{ backgroundColor: '#a3e635', color: '#0a0b0d' }}
               >
-                {tag}
-              </span>
-            ))}
+                Projects
+              </span>{' '}
+              I've built.
+            </h2>
           </div>
-
-          {/* Description */}
-          <p className="text-white/70 font-body text-lg leading-relaxed mb-8">
-            {project.longDescription}
-          </p>
-
-          {/* Actions */}
-          <div className="flex flex-wrap gap-4">
-            {project.demo && (
-              <a
-                href={project.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-cyan text-void font-body font-semibold rounded-full hover:bg-cyan/90 transition-colors"
-                data-cursor="link"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Live Demo
-              </a>
-            )}
-            {project.github && (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 border border-white/20 text-white font-body rounded-full hover:bg-white/10 transition-colors"
-                data-cursor="link"
-              >
-                <Github className="w-4 h-4" />
-                View Code
-              </a>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Projects = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Section reveal
-      gsap.fromTo(
-        sectionRef.current,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 80%',
-          },
-        }
-      );
-
-      // Stagger cards
-      const cards = sectionRef.current?.querySelectorAll('.glass-card');
-      if (cards) {
-        gsap.fromTo(
-          cards,
-          { y: 100, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top 70%',
-            },
-          }
-        );
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  return (
-    <section
-      ref={sectionRef}
-      id="projects"
-      className="relative py-24 px-6"
-    >
-      {/* Background gradient */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-20"
-        style={{
-          background:
-            'radial-gradient(ellipse at 50% 30%, rgba(124, 58, 237, 0.15) 0%, transparent 50%)',
-        }}
-      />
-
-      <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Section Title */}
-        <div className="text-center mb-16">
-          <span className="text-cyan font-mono text-sm tracking-wider">
-            &gt; SELECTED_WORKS
-          </span>
-          <h2 className="font-display font-bold text-4xl md:text-5xl text-white mt-2">
-            Featured Projects
-          </h2>
-          <p className="text-white/60 font-body mt-4 max-w-2xl mx-auto">
-            A collection of projects that showcase my skills in AI/ML, web development, and data visualization.
+          <p className="max-w-md text-sm text-slate-400">
+            Real software built with verified production impact. Open-source code available on GitHub.
           </p>
         </div>
 
-        {/* Projects Grid */}
+        {/* Project Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {projects.map((project) => (
-            <TiltCard
+            <div
               key={project.id}
-              project={project}
-              onClick={setSelectedProject}
-            />
+              className="group relative bg-[#121316] border border-white/5 hover:border-[#a3e635]/40 rounded-3xl p-8 sm:p-10 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
+            >
+              <div>
+                {/* Top Row: Tag & Timeline */}
+                <div className="flex items-center justify-between mb-6">
+                  <span className="inline-block bg-white/[0.05] text-[#a3e635] text-xs font-mono font-semibold uppercase tracking-wider px-3 py-1 rounded-full border border-white/10">
+                    {project.tag}
+                  </span>
+                  <span className="text-xs font-mono text-slate-500 font-semibold">
+                    {project.timeline}
+                  </span>
+                </div>
+
+                {/* Project Title */}
+                <h3 className="text-2xl font-bold tracking-tight text-white mb-4 group-hover:text-[#a3e635] transition-colors">
+                  {project.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-slate-400 text-sm leading-relaxed mb-6 font-normal">
+                  {project.description}
+                </p>
+
+                {/* Highlights */}
+                <ul className="space-y-2.5 mb-8">
+                  {project.highlights.map((item, hIdx) => (
+                    <li key={hIdx} className="flex items-start gap-2.5 text-xs text-slate-300">
+                      <Check size={13} weight="Outline" className="text-[#a3e635] mt-0.5 shrink-0" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                {/* Tech Pills */}
+                <div className="flex flex-wrap gap-2 mb-8 pt-4 border-t border-white/5">
+                  {project.tech.map((t) => (
+                    <span
+                      key={t}
+                      className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-white/[0.04] text-slate-300 border border-white/5"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Action Links - High contrast, clearly readable buttons */}
+                <div className="flex flex-wrap items-center gap-3">
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="inline-flex items-center gap-2 bg-[#16181d] hover:bg-[#1e2129] text-white hover:text-[#a3e635] font-bold text-xs px-4 py-2 rounded-full border border-[#a3e635]/60 hover:border-[#a3e635] shadow-[0_0_15px_rgba(163,230,53,0.12)] hover:shadow-[0_0_20px_rgba(163,230,53,0.25)] transition-all duration-200 active:scale-95 cursor-pointer group/btn"
+                    >
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#a3e635] opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-[#a3e635]" />
+                      </span>
+                      <span>Live Demo</span>
+                      <ArrowUpRight
+                        size={14}
+                        weight="Outline"
+                        className="text-[#a3e635] transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"
+                      />
+                    </a>
+                  )}
+
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="inline-flex items-center gap-1.5 bg-white/[0.04] hover:bg-white/[0.1] text-slate-300 hover:text-white font-medium text-xs px-4 py-2 rounded-full border border-white/10 hover:border-white/25 transition-all active:scale-95 cursor-pointer group/git"
+                  >
+                    <span>View GitHub Source</span>
+                    <ArrowUpRight
+                      size={14}
+                      weight="Outline"
+                      className="text-slate-400 group-hover/git:text-white transition-transform group-hover/git:translate-x-0.5 group-hover/git:-translate-y-0.5"
+                    />
+                  </a>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
 
-        {/* More Projects Link */}
-        <div className="text-center mt-12">
+        {/* View All on GitHub Banner */}
+        <div className="mt-12 text-center">
           <a
-            href="https://github.com/FAYEZ087?tab=repositories"
+            href="https://github.com/PinecoXZ"
             target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 border border-white/20 text-white/70 hover:text-cyan hover:border-cyan/50 hover:bg-cyan/10 font-body rounded-full transition-all duration-300 group"
-            data-cursor="link"
+            rel="noreferrer noopener"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-white transition-colors py-2 px-6 rounded-full border border-white/10 hover:border-[#a3e635]/40 bg-white/[0.02]"
           >
-            <Github className="w-5 h-5" />
-            For more projects, visit my GitHub
-            <svg
-              className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
+            <span>See all repositories on GitHub (@PinecoXZ)</span>
+            <ArrowUpRight size={16} weight="Outline" />
           </a>
         </div>
-      </div>
 
-      {/* Project Modal */}
-      {selectedProject && (
-        <ProjectModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
-      )}
+      </div>
     </section>
   );
 };

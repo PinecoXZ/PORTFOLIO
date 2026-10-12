@@ -1,92 +1,45 @@
-import { useEffect, useRef, useState } from 'react';
-import Lenis from 'lenis';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-import Navigation from './sections/Navigation';
+import React from 'react';
+import Navbar from './components/Navbar';
 import Hero from './sections/Hero';
+import CredibilityBar from './components/CredibilityBar';
 import About from './sections/About';
+import Process from './sections/Process';
 import Skills from './sections/Skills';
 import Projects from './sections/Projects';
+import Testimonial from './sections/Testimonial';
 import Contact from './sections/Contact';
 import Footer from './sections/Footer';
-import CustomCursor from './components/CustomCursor';
-import GrainOverlay from './components/GrainOverlay';
 
-gsap.registerPlugin(ScrollTrigger);
-
-function App() {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const lenisRef = useRef<Lenis | null>(null);
-
-  // Initialize Lenis smooth scroll
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-    });
-
-    lenisRef.current = lenis;
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    // Connect Lenis to GSAP ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
-
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
-
-    gsap.ticker.lagSmoothing(0);
-
-    // Loading animation
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 500);
-
-    return () => {
-      lenis.destroy();
-      clearTimeout(timer);
-    };
-  }, []);
-
+const App: React.FC = () => {
   return (
-    <div className="relative min-h-screen bg-void custom-cursor-active">
-      {/* Loading Screen */}
-      <div
-        className={`fixed inset-0 z-[100] bg-void flex items-center justify-center transition-opacity duration-700 ${
-          isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'
-        }`}
-      >
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-2 border-cyan/30 border-t-cyan rounded-full animate-spin" />
-          <span className="text-cyan font-mono text-sm tracking-wider">INITIALIZING...</span>
-        </div>
-      </div>
+    <div className="min-h-screen bg-[#0a0b0d] text-slate-200 selection:bg-[#a3e635] selection:text-black antialiased">
+      {/* Top Fixed Navigation */}
+      <Navbar />
 
-      {/* Custom Cursor */}
-      <CustomCursor />
-
-      {/* Grain Overlay */}
-      <GrainOverlay />
-
-      {/* Navigation */}
-      <Navigation />
-
-      {/* Main Content */}
-      <main className="relative">
+      {/* Main Page Flow */}
+      <main>
+        {/* Hero Section with Inverted Badges & Radiant Lime Aura */}
         <Hero />
+
+        {/* Credibility & Institution Bar */}
+        <CredibilityBar />
+
+        {/* About Section with Editorial Narrative & Stat Cards */}
         <About />
+
+        {/* Signature Dribbble Work Process 4-Card Bento Grid */}
+        <Process />
+
+        {/* Extensive List of Skills Bento Grid */}
         <Skills />
+
+        {/* Selected Works & Projects Showcase */}
         <Projects />
+
+        {/* Engineering Endorsement & Testimonial */}
+        <Testimonial />
+
+        {/* Big Bold Contact Callout */}
         <Contact />
       </main>
 
@@ -94,6 +47,6 @@ function App() {
       <Footer />
     </div>
   );
-}
+};
 
 export default App;

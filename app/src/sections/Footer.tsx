@@ -1,142 +1,76 @@
-import { useState, useRef, useEffect } from 'react';
-import { gsap } from 'gsap';
+import React from 'react';
+import { Envelope } from 'reicon-react';
 
-const Footer = () => {
-  const [easterEggTriggered, setEasterEggTriggered] = useState(false);
-  const [terminalMessage, setTerminalMessage] = useState('');
-  const nameRef = useRef<HTMLSpanElement>(null);
-  const terminalRef = useRef<HTMLDivElement>(null);
-
-  const handleCopyrightClick = () => {
-    if (easterEggTriggered) return;
-
-    setEasterEggTriggered(true);
-
-    // Glitch effect on name
-    if (nameRef.current) {
-      const originalText = 'Fayez Ahmad';
-      const glitchChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-
-      let iterations = 0;
-      const interval = setInterval(() => {
-        if (nameRef.current) {
-          nameRef.current.innerText = originalText
-            .split('')
-            .map((_, index) => {
-              if (index < iterations) {
-                return originalText[index];
-              }
-              return glitchChars[Math.floor(Math.random() * glitchChars.length)];
-            })
-            .join('');
-        }
-
-        iterations += 1 / 3;
-
-        if (iterations >= originalText.length) {
-          clearInterval(interval);
-          if (nameRef.current) {
-            nameRef.current.innerText = originalText;
-          }
-        }
-      }, 50);
-    }
-
-    // Show terminal message
-    const messages = [
-      '> System breach detected...',
-      '> Just kidding! 😄',
-      '> Thanks for visiting my portfolio!',
-      '> Have a great day! 🚀',
-    ];
-
-    let messageIndex = 0;
-    const messageInterval = setInterval(() => {
-      if (messageIndex < messages.length) {
-        setTerminalMessage(messages[messageIndex]);
-        messageIndex++;
-      } else {
-        clearInterval(messageInterval);
-        setTimeout(() => {
-          setTerminalMessage('');
-          setEasterEggTriggered(false);
-        }, 3000);
-      }
-    }, 800);
-  };
-
-  useEffect(() => {
-    if (terminalRef.current && terminalMessage) {
-      gsap.fromTo(
-        terminalRef.current,
-        { opacity: 0, y: 10 },
-        { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }
-      );
-    }
-  }, [terminalMessage]);
-
+const Footer: React.FC = () => {
   return (
-    <footer className="relative py-8 px-6 border-t border-white/5">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-        {/* Left side - Name */}
-        <div className="flex items-center gap-2">
-          <span ref={nameRef} className="font-display font-bold text-white">
-            Fayez Ahmad
+    <footer className="border-t border-white/5 bg-[#08090b] py-12 text-slate-500 text-xs">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+        
+        {/* Brand & Copyright */}
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-base font-bold text-white tracking-tight">
+            FAYEZ<span className="text-[#a3e635]">.DEV</span>
           </span>
-          <span className="text-white/40">|</span>
-          <span className="text-white/60 text-sm font-body">
-            CS Student & AI/ML Enthusiast
-          </span>
+          <span className="text-slate-600">|</span>
+          <span>© {new Date().getFullYear()} Fayez Ahmad. All rights reserved.</span>
         </div>
 
-        {/* Center - Copyright with easter egg */}
-        <div className="flex items-center gap-2 text-white/40 text-sm font-mono">
-          <button
-            onClick={handleCopyrightClick}
-            className="hover:text-cyan transition-colors cursor-pointer"
-            data-cursor="link"
-            aria-label="Click for a surprise"
+        {/* Social & Contact Icon Buttons */}
+        <div className="flex items-center gap-3">
+          {/* GitHub */}
+          <a
+            href="https://github.com/PinecoXZ"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="w-9 h-9 rounded-full bg-white/[0.04] hover:bg-[#a3e635] border border-white/10 hover:border-[#a3e635] text-slate-400 hover:text-black flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+            title="GitHub (@PinecoXZ)"
+            aria-label="GitHub Profile"
           >
-            ©
-          </button>
-          <span>{new Date().getFullYear()}</span>
-          <span>All rights reserved.</span>
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+            </svg>
+          </a>
+
+          {/* LinkedIn */}
+          <a
+            href="https://www.linkedin.com/in/fayez-ahmad-624619333/"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="w-9 h-9 rounded-full bg-white/[0.04] hover:bg-[#a3e635] border border-white/10 hover:border-[#a3e635] text-slate-400 hover:text-black flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+            title="LinkedIn"
+            aria-label="LinkedIn Profile"
+          >
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+            </svg>
+          </a>
+
+          {/* Twitter / X */}
+          <a
+            href="https://x.com/fayez_ahmad499"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="w-9 h-9 rounded-full bg-white/[0.04] hover:bg-[#a3e635] border border-white/10 hover:border-[#a3e635] text-slate-400 hover:text-black flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+            title="Twitter / X"
+            aria-label="Twitter / X Profile"
+          >
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+          </a>
+
+          {/* Email */}
+          <a
+            href="mailto:fayezahmad827@gmail.com"
+            className="w-9 h-9 rounded-full bg-white/[0.04] hover:bg-[#a3e635] border border-white/10 hover:border-[#a3e635] text-slate-400 hover:text-black flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+            title="Email (fayezahmad827@gmail.com)"
+            aria-label="Send Email"
+          >
+            <Envelope size={16} weight="Outline" />
+          </a>
         </div>
 
-        {/* Right side - Back to top */}
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="text-white/40 hover:text-cyan transition-colors text-sm font-body flex items-center gap-2"
-          data-cursor="link"
-        >
-          Back to top
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 10l7-7m0 0l7 7m-7-7v18"
-            />
-          </svg>
-        </button>
       </div>
-
-      {/* Easter Egg Terminal Message */}
-      {terminalMessage && (
-        <div
-          ref={terminalRef}
-          className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50"
-        >
-          <div className="glass-card px-6 py-3 rounded-lg">
-            <span className="font-mono text-sm text-cyan">{terminalMessage}</span>
-          </div>
-        </div>
-      )}
     </footer>
   );
 };
