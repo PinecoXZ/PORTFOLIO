@@ -1,50 +1,23 @@
-import React from 'react';
-import Navbar from './components/Navbar';
-import Hero from './sections/Hero';
-import CredibilityBar from './components/CredibilityBar';
-import About from './sections/About';
-import Process from './sections/Process';
-import Skills from './sections/Skills';
-import Projects from './sections/Projects';
-import Testimonial from './sections/Testimonial';
-import Contact from './sections/Contact';
-import Footer from './sections/Footer';
+import React, { useState } from 'react';
+import RobinCylinderShowcase from './components/RobinCylinderShowcase';
+import AboutDrawer from './components/AboutDrawer';
 
 const App: React.FC = () => {
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+
   return (
-    <div className="min-h-screen bg-[#0a0b0d] text-slate-200 selection:bg-[#a3e635] selection:text-black antialiased">
-      {/* Top Fixed Navigation */}
-      <Navbar />
+    <div className="fixed inset-0 w-full h-full overflow-hidden bg-[#07090e] text-slate-200 antialiased select-none">
+      {/* Premier Robin Mastromarino 3D Curved Cylinder Showcase (100% Full Screen) */}
+      <RobinCylinderShowcase
+        isAboutOpen={isAboutOpen}
+        onOpenAbout={() => setIsAboutOpen(!isAboutOpen)}
+      />
 
-      {/* Main Page Flow */}
-      <main>
-        {/* Hero Section with Inverted Badges & Radiant Lime Aura */}
-        <Hero />
-
-        {/* Credibility & Institution Bar */}
-        <CredibilityBar />
-
-        {/* About Section with Editorial Narrative & Stat Cards */}
-        <About />
-
-        {/* Signature Dribbble Work Process 4-Card Bento Grid */}
-        <Process />
-
-        {/* Extensive List of Skills Bento Grid */}
-        <Skills />
-
-        {/* Selected Works & Projects Showcase */}
-        <Projects />
-
-        {/* Engineering Endorsement & Testimonial */}
-        <Testimonial />
-
-        {/* Big Bold Contact Callout */}
-        <Contact />
-      </main>
-
-      {/* Footer */}
-      <Footer />
+      {/* Robin Mastromarino Editorial About Slide-Out Overlay */}
+      <AboutDrawer
+        isOpen={isAboutOpen}
+        onClose={() => setIsAboutOpen(false)}
+      />
     </div>
   );
 };

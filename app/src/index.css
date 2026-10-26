@@ -4,41 +4,56 @@
 
 @layer base {
   html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
     scroll-behavior: smooth;
     background-color: #0a0b0d;
     color: #e2e8f0;
   }
 
   body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
     background-color: #0a0b0d;
     color: #94a3b8;
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family:
+      'Plus Jakarta Sans',
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+  }
+
+  #root {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
   }
 
   ::selection {
-    background: #a3e635;
-    color: #000000;
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
   }
 
-  /* Minimal dark scrollbar with lime touch */
+  /* Minimal dark scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #0a0b0d;
+    background: #07090e;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #1e2026;
+    background: #171d2c;
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #2b2e37;
+    background: rgba(255, 255, 255, 0.4);
   }
 
   /* Reduced motion */
@@ -55,26 +70,37 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+
+    .mastromarino-reveal {
+      transform: none !important;
+      opacity: 1 !important;
+      transition: none !important;
+    }
   }
 }
 
 /* Explicit link overrides to prevent default browser visited link coloring */
-a,
-a:link,
-a:visited {
-  color: inherit !important;
-  text-decoration: none !important;
+a {
+  text-decoration: none;
 }
 
-/* Neon glow animations & badges */
-.hero-glow {
-  background: radial-gradient(circle at 65% 15%, rgba(184, 255, 0, 0.22) 0%, rgba(184, 255, 0, 0.05) 45%, transparent 70%);
+/* Robin Mastromarino Signature Masked Reveal System */
+.mastromarino-mask {
+  overflow: hidden;
+  display: block;
 }
 
-.subtle-border {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.mastromarino-reveal {
+  transform: translateY(115%);
+  opacity: 0;
+  transition:
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
 }
 
-.subtle-border-hover:hover {
-  border-color: rgba(184, 255, 0, 0.4);
+.mastromarino-reveal.is-revealed {
+  transform: translateY(0%);
+  opacity: 1;
 }
+
